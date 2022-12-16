@@ -6,5 +6,3 @@ img_path = glob('Aquarium/test/images/*')
 
 for i in img_path:
 	os.system(path + i)
-
-x = 123
