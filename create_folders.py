@@ -3,14 +3,19 @@ import os
 
 def create_folders(path='C:/git_workspace/'):
     
-    if not os.path.exists(path + 'train'):
-        os.mkdir(path + 'train')
-        os.mkdir(path + 'train/images') 
-        os.mkdir(path + 'train/labels')
-    if not os.path.exists(path + 'valid'):
-        os.mkdir(path + 'valid')
-        os.mkdir(path + 'valid/images') 
-        os.mkdir(path + 'valid/labels')
+    if not os.path.exists(path + 'train_valid_test'):
+        os.mkdir(path + 'train_valid_test')
+        os.mkdir(path + 'train_valid_test/train')
+        os.mkdir(path + 'train_valid_test/train/images') 
+        os.mkdir(path + 'train_valid_test/train/labels')
+        
+        os.mkdir(path + 'train_valid_test/valid')
+        os.mkdir(path + 'train_valid_test/valid/images') 
+        os.mkdir(path + 'train_valid_test/valid/labels')
+        
+        os.mkdir(path + 'train_valid_test/test')
+        os.mkdir(path + 'train_valid_test/test/images') 
+        os.mkdir(path + 'train_valid_test/test/labels')
 
 
 if __name__ == '__main__':
