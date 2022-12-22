@@ -23,7 +23,7 @@ def image_path(file_path):
 
 
 #3 圖片讀取/高斯模糊/雙邊濾波/翻轉/存檔
-def image_read(file_path, color=0, gaussian=0, bilateral=0, flip=0, flip_direction=-1, save=0, save_path='c:/test/', save_name='img'):
+def image_read(file_path, color=0, gaussian=0, bilateral=0, flip=0, flip_direction=-1, show=0, save=0, save_path='C:\git_workspace\img_processing_path\images', save_name='flip-img'):
     count = 0
     for i in file_path:
         count += 1
@@ -37,17 +37,22 @@ def image_read(file_path, color=0, gaussian=0, bilateral=0, flip=0, flip_directi
             img = cv2.flip(img, flip_direction) 
             # flip 1 水平翻轉, 0 垂直翻轉, -1 水平+垂直翻轉
         if save:
-            cv2.imwrite(save_path + save_name + f'-{count:03d}.' + img_type, img)
-        cv2.imshow('image', img)
-        cv2.waitKey(0)
+            os.chdir(save_path)
+            cv2.imwrite(save_name + f'-{count:03d}.' + img_type, img)
+        if show:
+            cv2.imshow('image', img)
+            cv2.waitKey(0)
     cv2.destroyAllWindows()
 
 
 
 if __name__ == '__main__':
+    # color, gaussian, bilateral, flip, flip_direction, save, save_path, save_name
+    # filp_direction 1 水平翻轉, 0 垂直翻轉, -1 水平+垂直翻轉
+    
     #1 test
     #print(image_path_AllFolder(file := input('Input path:')))
 
     #3 test
-    print(image_read(image_path(file := input('input image path: ')), color=1, gaussian=1, flip=1, save=1))
+    image_read(image_path(file := input('input image path: ')), color=1, bilateral=1, flip=1, flip_direction=1, save=1)
 
