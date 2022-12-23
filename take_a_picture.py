@@ -43,3 +43,4 @@ print(f"[INFO] {total} images stored")
 print("[INFO] cleaning up...")
 cv2.destroyAllWindows()
 vs.stop()
+

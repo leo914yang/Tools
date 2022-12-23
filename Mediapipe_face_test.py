@@ -130,7 +130,7 @@ def rac_face(show_img=0):
   mp_drawing = mp.solutions.drawing_utils           # 建立繪圖方法
   for i in img:
     print(i)
-    img_name = i.split('\\')[1]
+    img_name = i.split('images\\')[1]
     img_file = cv2.imread(i)
     with mp_face_detection.FaceDetection(             # 開始偵測人臉
         model_selection=0, min_detection_confidence=0.5) as face_detection:
@@ -153,5 +153,5 @@ if __name__=='__main__':
   # webcam_input()
   # static_images()
   # show_img 0 or 1
-  # label_folder = 'C:\git_workspace\'
-  rac_face(show_img=1)
+  # 先label再丟進train_test_valid
+  rac_face(show_img=0)

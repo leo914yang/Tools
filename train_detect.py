@@ -8,7 +8,7 @@ def train():
     cfg = input('Input cfg(yolo): ') + '.yaml'
     epoch = input('Input Epochs: ')
     device = input('Input device: ')
-    os.system(f"python {path + '/train.py'} --batch {batch} --cfg {path + 'cfg/training/' + cfg} --img 640 --epochs {epoch} --data {path + 'Teammate/data.yaml'} --weights '' --name yolov7_test --hyp {path + 'data/hyp.scratch.p5.yaml'} --device {device}")
+    os.system(f"python {path + 'train.py'} --batch {batch} --cfg {path + 'cfg/training/' + cfg} --img 640 --epochs {epoch} --data {path + 'Teammate/data.yaml'} --weights '' --name yolov7_test --hyp {path + 'data/hyp.scratch.p5.yaml'} --device {device}")
 
 
 def detect():
