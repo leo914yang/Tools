@@ -21,14 +21,14 @@ class ipcamCapture:
         self.tracker = cv2.TrackerCSRT_create() 
         self.tracking = False
 
-	# 攝影機連接。
+	# 攝影機連接
         self.capture = cv2.VideoCapture(URL)
 
     def set_Frame2(self, Frame2):
         self.Frame2 = Frame2
     
     def start(self):
-	# 把程式放進子執行緒，daemon=True 表示該執行緒會隨著主執行緒關閉而關閉。
+	# 把程式放進子執行緒, daemon=True 表示該執行緒會隨著主執行緒關閉而關閉
         print('ipcam started!')
         threading.Thread(target=self.queryframe, daemon=True, args=()).start()
     
@@ -45,7 +45,7 @@ class ipcamCapture:
         print('verify stop!')
 
     def getframe(self):
-	# 當有需要影像時，再回傳最新的影像。
+	# 當有需要影像時, 再回傳最新的影像
         return self.Frame.copy()
         
     def queryframe(self):
@@ -57,14 +57,20 @@ class ipcamCapture:
     def verify(self):
         # verify fail counter
         counter = 0
+
+        # 紀錄前一迴圈的辨識狀態
         state = True
         while self.tracking:
 
+            # 連續失敗10次則跳出迴圈
+            if counter == 10:
+                self.verify_stop()
             if not state:
                 counter += 1
             else:
                 counter = 0
 
+            # 確認當前追蹤畫面與指定目標是否相同
             score = DeepFace.verify(
                 self.Frame, self.Frame2, model_name='Facenet', 
                 distance_metric='cosine', 
@@ -74,16 +80,14 @@ class ipcamCapture:
             state = score['verified']
             #if score['threshold'] < 0.4:
             
-            if counter == 10:
-                self.verify_stop()
             time.sleep(1)
-        
+    
+    # 啟動tracking
     def track(self, coordinate):
         self.tracker.init(image, coordinate)
         self.tracking = True
 
-
-
+# 取整數
 def _coordinates(x, y):
     return math.floor(x), math.floor(y)
 
@@ -112,16 +116,18 @@ cap = ipcamCapture(0)
 cap.start()
 time.sleep(1)
 
+# 開始計時, 用來計算FPS
 start_time = time.time()
 time_counter = 0
 while True:
     image = cap.getframe()
-    
     time_counter += 1
     fps = time.time() - start_time
     if fps != 0:
         cv2.putText(image, f'FPS:{time_counter/fps:.2f}', (100, 80), cv2.FONT_HERSHEY_SIMPLEX,
                 1, (0, 0, 255), 1, cv2.LINE_AA)
+    
+    # 開始tracking則執行以下程式
     if cap.tracking:
         success, point = cap.tracker.update(image)
         if success:
@@ -132,10 +138,11 @@ while True:
             cv2.putText(image, 'main', p1, cv2.FONT_HERSHEY_SIMPLEX,
                 1, (0, 0, 255), 1, cv2.LINE_AA)
                 
-            # save 1 picture for our main character
+            # save 1 picture for main character
             _image = image[point[1]:point[1]+point[3], point[0]:point[0]+point[2]]
             pic_list = glob(path + '*')
-                    
+
+            # 指令資料夾內沒有照片就會存一張目標照片        
             if len(pic_list) < 1:     
                 cv2.imwrite(path + str(len(pic_list)) + '.jpg', _image)
             
@@ -158,6 +165,8 @@ while True:
             conf = df['confidence'][index]
             cv2.putText(image, f'{conf:.2f}', (int(i[0])+400, int(i[1])), cv2.FONT_HERSHEY_SIMPLEX,
                     1, (0, 0, 255), 1, cv2.LINE_AA)
+            
+            # 一旦偵測到speaker, 立刻開始追蹤
             if i[6] =='speaker':
                 cap.track([int(i[0]), int(i[1]), int(abs(i[0]-i[2])), int(abs(i[1]-i[3]))])
             
@@ -167,6 +176,7 @@ while True:
         cv2.destroyAllWindows()
         cap.verify_stop()
         cap.stop()
+        # 程式結束移除存有照片的資料夾, 並建立新資料夾
         shutil.rmtree(path)
         os.mkdir(path)
         break
