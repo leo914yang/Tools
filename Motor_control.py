@@ -16,6 +16,7 @@ def Direction(steps, STEPS_PER_REVOLUTION):
 def Run(angle, direction=1, wait_time=5/float(1000), STEPPER_PINS=[17,18,27,22]):
     GPIO.setmode(GPIO.BCM)
     
+    # GPIO 8 steps mode
     STEPS_PER_REVOLUTION = int(64 * 64 * angle)
     SEQUENCE = [[1,0,0,0],
                 [1,1,0,0],
@@ -32,16 +33,20 @@ def Run(angle, direction=1, wait_time=5/float(1000), STEPPER_PINS=[17,18,27,22])
     
     SEQUENCE_COUNT = len(SEQUENCE)
     PINS_COUNT = len(STEPPER_PINS)
-    
-    sequence_index = 0 # 記錄目前進行到哪個步驟的變數
-    steps = 0 # 記錄目前已移動步數
+
+    # 記錄目前進行到哪個步驟的變數
+    sequence_index = 0 
+    # 記錄目前已移動步數
+    steps = 0 
     
     try:
         print('開始程式')
         while True:
             if steps == STEPS_PER_REVOLUTION:
                 break
-            for pin in range(PINS_COUNT): # 給3(?)根pin低電位
+
+            # 給3根pin低電位
+            for pin in range(PINS_COUNT): 
                 GPIO.output(STEPPER_PINS[pin], SEQUENCE[sequence_index][pin])
     
             steps += direction
