@@ -1,9 +1,10 @@
 import os
 
 
-def create_folders(path='C:/git_workspace/'):
+def create_folders(path='/Users/leo/git_workspace/'):
     
     if not os.path.exists(path + 'train_valid_test'):
+        os.chdir(path)
         os.mkdir(path + 'train_valid_test')
         os.mkdir(path + 'train_valid_test/train')
         os.mkdir(path + 'train_valid_test/train/images') 
@@ -19,4 +20,4 @@ def create_folders(path='C:/git_workspace/'):
 
 
 if __name__ == '__main__':
-    create_folders(path := input('Input: '))
+    create_folders()
