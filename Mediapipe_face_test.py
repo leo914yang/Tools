@@ -75,12 +75,17 @@ def webcam_input():
       image.flags.writeable = False
       image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
       
+      imgw = image.shape[0]
+      imgh = image.shape[1]
+
       results = face_mesh.process(image)
       # Draw the face mesh annotations on the image.
       image.flags.writeable = True
       image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
       if results.multi_face_landmarks:
         for face_landmarks in results.multi_face_landmarks:
+          #face_localtion(face_landmarks, imgw, imgh)
+          
           mp_drawing.draw_landmarks(
               image=image,
               landmark_list=face_landmarks,
@@ -109,21 +114,23 @@ def webcam_input():
   cap.release()
 
 
-def face_localtion(landmark, c, img_name, path):
+def face_localtion(landmark, c=0, img_name='', path=''):
   
   x = landmark.location_data.relative_bounding_box.xmin
   y = landmark.location_data.relative_bounding_box.ymin
   w = landmark.location_data.relative_bounding_box.width
   h = landmark.location_data.relative_bounding_box.height
   #output = str(c) + ' ' + str(x) + ' ' + str(y) + ' ' + str(w) + ' ' + str(h)
-  output = f'{c} {x:.6f} {y:.6f} {w:.6f} {h:.6f}'
+  new_x = x + w/2
+  new_y = y + h/2
+
+  output = f'{c} {new_x} {new_y} {w} {h}'
+  print(output)
   with open(path + f'/{img_name}.txt', 'w') as w:
     w.write(output)
 
 
-def rac_face(show_img=0):
-  path = input('Img path: ')
-  label_folder = input('Label folder path: ')
+def rac_face(show_img=0, path='/Users/leo/Downloads/images/', label_folder='/Users/leo/Downloads/labels/'):
   classification = input('Classification: ')
   
   img = ip.image_path(path)
@@ -151,8 +158,8 @@ def rac_face(show_img=0):
 
 
 if __name__=='__main__':
-  # webcam_input()
-  # static_images()
+  webcam_input()
+  #static_images()
   # show_img 0 or 1
   # 先label再丟進train_test_valid
-  rac_face(show_img=0)
+  #rac_face(show_img=0)
