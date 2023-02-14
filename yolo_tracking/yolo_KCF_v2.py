@@ -36,7 +36,7 @@ def webcam_input():
                        path='/Users/leo/Downloads/yolo_v5/yolov5/runs/train/exp3/weights/best.pt', force_reload=True)
     
     # kalman filter tracker
-    tracker = cv2.TrackerCSRT_create()
+    tracker = cv2.legacy.TrackerCSRT_create()
     tracking = False
 
     # Deepface pre-build model

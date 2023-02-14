@@ -18,7 +18,7 @@ class ipcamCapture:
         self.status = False
         self.isstop = False
         # kalman filter tracker
-        self.tracker = cv2.TrackerCSRT_create() 
+        self.tracker = cv2.legacy.TrackerCSRT_create() 
         self.tracking = False
 
 	# 攝影機連接。
