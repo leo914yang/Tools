@@ -32,7 +32,7 @@ def webcam_input():
     model = torch.hub.load('ultralytics/yolov5', 'custom',
                        path='/Users/leo/Downloads/yolo_v5/yolov5/runs/train/exp3/weights/best.pt', force_reload=True)
     # kalman filter tracker
-    tracker = cv2.TrackerCSRT_create()  # 創建追蹤器
+    tracker = cv2.legacy.TrackerCSRT_create()  # 創建追蹤器
     tracking = False
     # ASCII = [48, 49, 50, 51, 52]
     while cap.isOpened():
